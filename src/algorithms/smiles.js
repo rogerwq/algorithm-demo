@@ -29,12 +29,13 @@ function Cell(props) {
         backgroundColor: "white"
       }}
     >
-      <h3>get_closure(1, None)</h3>
+      <h3>{data.title}</h3>
       <Flex flexDirection="row">
         <canvas
           id="example-canvas"
           data-smiles="Cc1cccc2CC=Cc12"
-          data-numbering="[1,2,3,4,5,6,7,8,9,10]"
+          data-numbering="[0,1,2,3,4,5,6,7,8,9]"
+          data-numbering-directions='{"1":"E", "3":"N", "4":"N", "5":"NW","6":"NW","7":"W"}'
         ></canvas>
         <div>
           <table>
@@ -44,15 +45,19 @@ function Cell(props) {
             </tr>
             <tr>
               <td>visited</td>
-              <td>[]</td>
+              <td>{data.visited}</td>
+            </tr>
+            <tr>
+              <td>nbors</td>
+              <td>{data.nbors}</td>
             </tr>
             <tr>
               <td>openingClosures</td>
-              <td>[]</td>
+              <td>{data.openingClosures}</td>
             </tr>
             <tr>
               <td>closingClosures</td>
-              <td>[]</td>
+              <td>{data.closingClosures}</td>
             </tr>
           </table>
         </div>
@@ -70,7 +75,173 @@ export default class Smiles extends React.Component {
   }
 
   render() {
-    let all_data = [{ ancestor: "[1, 2, 3]" }, { ancestor: "[1, 2, 3]" }];
+    let all_data = [
+      {
+        title: "get_closure(0, None)",
+        ancestor: "[0]",
+        visited: "[0]",
+        nbors: "[1]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title: "get_closure(0, None) -> get_closure(1, 0)",
+        ancestor: "[0, 1]",
+        visited: "[0, 1]",
+        nbors: "[2, 9]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title: "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1)",
+        ancestor: "[0, 1, 2]",
+        visited: "[0, 1, 2]",
+        nbors: "[3]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2)",
+        ancestor: "[0, 1, 2, 3]",
+        visited: "[0, 1, 2, 3]",
+        nbors: "[4]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3)",
+        ancestor: "[0, 1, 2, 3, 4]",
+        visited: "[0, 1, 2, 3, 4]",
+        nbors: "[5]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4)",
+        ancestor: "[0, 1, 2, 3, 4, 5]",
+        visited: "[0, 1, 2, 3, 4, 5]",
+        nbors: "[6, 9]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5)",
+        ancestor: "[0, 1, 2, 3, 4, 5, 6]",
+        visited: "[0, 1, 2, 3, 4, 5, 6]",
+        nbors: "[7]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5) -> get_closure(7, 6)",
+        ancestor: "[0, 1, 2, 3, 4, 5, 6, 7]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7]",
+        nbors: "[8]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5) -> get_closure(7, 6) -> get_closure(8, 7)",
+        ancestor: "[0, 1, 2, 3, 4, 5, 6, 7, 8]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8]",
+        nbors: "[9]",
+        openingClosures: "{}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5) -> get_closure(7, 6) -> get_closure(8, 7) -> get_closure(9, 8)",
+        ancestor: "[0, 1, 2, 3, 4, 5, 6, 7, 8]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[1, 5]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5) -> get_closure(7, 6) -> get_closure(8, 7)",
+        ancestor: "[0, 1, 2, 3, 4, 5, 6, 7]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[9]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5) -> get_closure(7, 6)",
+        ancestor: "[0, 1, 2, 3, 4, 5, 6]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[8]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5)",
+        ancestor: "[0, 1, 2, 3, 4, 5]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[7]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4)",
+        ancestor: "[0, 1, 2, 3, 4]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[6]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3)",
+        ancestor: "[0, 1, 2, 3]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[5]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title:
+          "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2)",
+        ancestor: "[0, 1, 2]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[4]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title: "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1)",
+        ancestor: "[0, 1]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[3]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title: "get_closure(0, None) -> get_closure(1, 0)",
+        ancestor: "[0]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[2, 9]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      },
+      {
+        title: "get_closure(0, None)",
+        ancestor: "[]",
+        visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        nbors: "[1]",
+        openingClosures: "{1: [9], 5: [9]}",
+        closingClosures: "[]"
+      }
+    ];
     const all_cells = all_data.map((data) => <Cell data={data} />);
 
     return (

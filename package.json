@@ -10,7 +10,7 @@
     "react-dom": "latest",
     "react-router-dom": "latest",
     "react-scripts": "2.0.0",
-    "smiles-drawer-fork-continue": "0.0.1"
+    "smiles-drawer-fork-continue": "0.0.2"
   },
   "keywords": [
     "react",
