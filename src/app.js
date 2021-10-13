@@ -19,6 +19,9 @@ export default function BasicExample() {
           <li>
             <Link to="/">Home</Link>
           </li>
+          <li>
+            <Link to="/our-github">Our Github</Link>
+          </li>
         </ul>
 
         <hr />
@@ -37,6 +40,14 @@ export default function BasicExample() {
           <Route path="/smiles">
             <Smiles />
           </Route>
+          <Route
+            path="/our-github"
+            component={() => {
+              window.location.href =
+                "https://github.com/rogerwq/algorithm-demo";
+              return null;
+            }}
+          ></Route>
         </Switch>
       </div>
     </Router>
