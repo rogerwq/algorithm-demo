@@ -21,60 +21,92 @@ let code_blocks = {
   `
 };
 
-function Cell(props) {
-  const data = props.data;
-  return (
-    <div
-      style={{
-        backgroundColor: "white"
-      }}
-    >
-      <h3>{data.title}</h3>
-      <Flex flexDirection="row">
-        <canvas
-          id="example-canvas"
-          data-smiles="Cc1cccc2CC=Cc12"
-          data-numbering="[0,1,2,3,4,5,6,7,8,9]"
-          data-numbering-directions='{"1":"E", "3":"N", "4":"N", "5":"NW","6":"NW","7":"W"}'
-        ></canvas>
-        <div>
-          <table>
-            <tr>
-              <td>ancestor</td>
-              <td>{data.ancestor}</td>
-            </tr>
-            <tr>
-              <td>visited</td>
-              <td>{data.visited}</td>
-            </tr>
-            <tr>
-              <td>nbors</td>
-              <td>{data.nbors}</td>
-            </tr>
-            <tr>
-              <td>openingClosures</td>
-              <td>{data.openingClosures}</td>
-            </tr>
-            <tr>
-              <td>closingClosures</td>
-              <td>{data.closingClosures}</td>
-            </tr>
-          </table>
-        </div>
-        <div />
-        <div></div>
-      </Flex>
-    </div>
-  );
-}
+class Cell extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props = props;
+  }
 
-export default class Smiles extends React.Component {
-  componentDidMount() {
+  updateDrawer() {
     let options = { width: 300, height: 300 };
     SmilesDrawer.apply(options);
   }
 
+  componentDidUpdate() {
+    this.updateDrawer();
+  }
+
+  componentDidMount() {
+    this.updateDrawer();
+  }
+
   render() {
+    const data = this.props.data;
+    return (
+      <div
+        style={{
+          backgroundColor: "white"
+        }}
+      >
+        <h3>{data.title}</h3>
+        <Flex flexDirection="row">
+          <canvas
+            id="example-canvas"
+            data-smiles="Cc1cccc2CC=Cc12"
+            data-numbering="[0,1,2,3,4,5,6,7,8,9]"
+            data-numbering-directions='{"1":"E", "3":"N", "4":"N", "5":"NW","6":"NW","7":"W"}'
+            data-vertex-highlights={data.highlights}
+          ></canvas>
+          <div>
+            <table>
+              <tbody>
+                <tr>
+                  <td>ancestor</td>
+                  <td>{data.ancestor}</td>
+                </tr>
+                <tr>
+                  <td>visited</td>
+                  <td>{data.visited}</td>
+                </tr>
+                <tr style={{ color: "rgb(0, 255, 255)" }}>
+                  <td>nbors</td>
+                  <td>{data.nbors}</td>
+                </tr>
+                <tr>
+                  <td>openingClosures</td>
+                  <td>{data.openingClosures}</td>
+                </tr>
+                <tr>
+                  <td>closingClosures</td>
+                  <td>{data.closingClosures}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div />
+          <div></div>
+        </Flex>
+      </div>
+    );
+  }
+}
+
+export default class Smiles extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      getClosureIndex: 0
+    };
+  }
+
+  // componentDidMount() {
+  //   let options = { width: 300, height: 300 };
+  //   SmilesDrawer.apply(options);
+  // }
+
+  render() {
+    const atom_color = "rgba(0, 255, 0, 0.5)";
+    const neighbour_color = "rgba(0, 255, 255, 0.5)";
     let all_data = [
       {
         title: "get_closure(0, None)",
@@ -82,7 +114,8 @@ export default class Smiles extends React.Component {
         visited: "[0]",
         nbors: "[1]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"0": "${atom_color}", "1": "${neighbour_color}"}`
       },
       {
         title: "get_closure(0, None) -> get_closure(1, 0)",
@@ -90,7 +123,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1]",
         nbors: "[2, 9]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"1": "${atom_color}", "2": "${neighbour_color}", "9": "${neighbour_color}"}`
       },
       {
         title: "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1)",
@@ -98,7 +132,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2]",
         nbors: "[3]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"2": "${atom_color}", "3": "${neighbour_color}"}`
       },
       {
         title:
@@ -107,7 +142,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2, 3]",
         nbors: "[4]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"3": "${atom_color}", "4": "${neighbour_color}"}`
       },
       {
         title:
@@ -116,7 +152,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2, 3, 4]",
         nbors: "[5]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"4": "${atom_color}", "5": "${neighbour_color}"}`
       },
       {
         title:
@@ -125,7 +162,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2, 3, 4, 5]",
         nbors: "[6, 9]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"5": "${atom_color}", "6": "${neighbour_color}", "9": "${neighbour_color}"}`
       },
       {
         title:
@@ -134,7 +172,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2, 3, 4, 5, 6]",
         nbors: "[7]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"6": "${atom_color}", "7": "${neighbour_color}"}`
       },
       {
         title:
@@ -143,7 +182,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2, 3, 4, 5, 6, 7]",
         nbors: "[8]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"7": "${atom_color}", "8": "${neighbour_color}"}`
       },
       {
         title:
@@ -152,7 +192,8 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8]",
         nbors: "[9]",
         openingClosures: "{}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"8": "${atom_color}", "9": "${neighbour_color}"}`
       },
       {
         title:
@@ -161,88 +202,98 @@ export default class Smiles extends React.Component {
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
         nbors: "[1, 5]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"9": "${atom_color}", "1": "${neighbour_color}", "5": "${neighbour_color}"}`
       },
       {
         title:
           "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5) -> get_closure(7, 6) -> get_closure(8, 7)",
         ancestor: "[0, 1, 2, 3, 4, 5, 6, 7]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[9]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"8": "${atom_color}"}`
       },
       {
         title:
           "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5) -> get_closure(7, 6)",
         ancestor: "[0, 1, 2, 3, 4, 5, 6]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[8]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"7": "${atom_color}"}`
       },
       {
         title:
           "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4) -> get_clossure(6, 5)",
         ancestor: "[0, 1, 2, 3, 4, 5]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[7]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"6": "${atom_color}"}`
       },
       {
         title:
           "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3) -> get_closure(5, 4)",
         ancestor: "[0, 1, 2, 3, 4]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[6]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"5": "${atom_color}"}`
       },
       {
         title:
           "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2) -> get_closure(4, 3)",
         ancestor: "[0, 1, 2, 3]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[5]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"4": "${atom_color}"}`
       },
       {
         title:
           "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1) -> get_closure(3, 2)",
         ancestor: "[0, 1, 2]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[4]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"3": "${atom_color}"}`
       },
       {
         title: "get_closure(0, None) -> get_closure(1, 0) -> get_closure(2, 1)",
         ancestor: "[0, 1]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[3]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"2": "${atom_color}"}`
       },
       {
         title: "get_closure(0, None) -> get_closure(1, 0)",
         ancestor: "[0]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[2, 9]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"1": "${atom_color}"}`
       },
       {
         title: "get_closure(0, None)",
         ancestor: "[]",
         visited: "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
-        nbors: "[1]",
+        nbors: "[]",
         openingClosures: "{1: [9], 5: [9]}",
-        closingClosures: "[]"
+        closingClosures: "[]",
+        highlights: `{"0": "${atom_color}"}`
       }
     ];
-    const all_cells = all_data.map((data) => <Cell data={data} />);
+    // const all_cells = all_data.map((data) => <Cell data={data} />);
 
     return (
       <div>
@@ -254,7 +305,29 @@ export default class Smiles extends React.Component {
           theme={dracula}
           wrapLines
         />
-        <div>{all_cells}</div>
+        <button
+          onClick={() =>
+            this.setState({
+              getClosureIndex:
+                this.state.getClosureIndex - 1 < 0
+                  ? 0
+                  : this.state.getClosureIndex - 1
+            })
+          }
+        >
+          Prev
+        </button>
+        <button
+          onClick={() =>
+            this.setState({
+              getClosureIndex:
+                (this.state.getClosureIndex + 1) % all_data.length
+            })
+          }
+        >
+          Next
+        </button>
+        <Cell data={all_data[this.state.getClosureIndex]} />
       </div>
     );
   }
