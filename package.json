@@ -4,10 +4,13 @@
   "description": "Algorithm Demos",
   "main": "index.js",
   "dependencies": {
+    "nice-react-layout": "0.9.0",
+    "react": "latest",
+    "react-code-blocks": "0.0.9-0",
+    "react-dom": "latest",
     "react-router-dom": "latest",
     "react-scripts": "2.0.0",
-    "react": "latest",
-    "react-dom": "latest"
+    "smiles-drawer-fork-continue": "0.0.3"
   },
   "keywords": [
     "react",
