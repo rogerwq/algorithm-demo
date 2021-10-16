@@ -20,7 +20,7 @@ export default function BasicExample() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/our-github">Our Github</Link>
+            <Link to="/our-github">Github Repo</Link>
           </li>
         </ul>
 
