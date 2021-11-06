@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Smiles from "./algorithms/smiles";
 
 // This site has 3 pages, all of which are rendered
@@ -33,13 +33,9 @@ export default function BasicExample() {
           you have multiple routes, but you want only one
           of them to render at a time
         */}
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/smiles">
-            <Smiles />
-          </Route>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/smiles" element={<Smiles />} />
           <Route
             path="/our-github"
             component={() => {
@@ -48,7 +44,7 @@ export default function BasicExample() {
               return null;
             }}
           ></Route>
-        </Switch>
+        </Routes>
       </div>
     </Router>
   );
